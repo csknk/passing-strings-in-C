@@ -1,4 +1,4 @@
-Strings in C: Change String in Function
+Strings in C: Access String in Function
 =======================================
 If you need to operate on strings, it's helpful to abstract this away into separate functions (which can be held in different files) to keep your code clean and to reduce repetition.
 
