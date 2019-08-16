@@ -48,6 +48,7 @@ void amend(char *str, size_t len)
 
 // Get string from user and concatenate it onto src.
 // We don't know the final length of the string.
+// Write the concatenated strings into resultBuffer.
 int setBufferDynamically(const char *src, char **resultBuffer)
 {
 	// Initalise the variables required by getline()
