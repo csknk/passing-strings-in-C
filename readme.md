@@ -29,6 +29,31 @@ void function(char *myString)
   }
 }
 ```
+Here’s another approach using a while loop to check for the end of the string:
+
+```c
+// Within this function, `line` is initially a pointer to the first
+// char in a string (Null terminated char array).
+void f(char *line)
+{
+  // Continue if the value pointed at by `line` is not NUL
+  while (*line) {
+    // Dereference `line` and assign a new value '0'
+    // then advance the pointer
+    *(line++) = '0';
+  }
+}
+
+
+int main()
+{
+	char line[] = "gdgegryt";
+	f(line);
+	printf("%s\n", line);
+	return 0;
+}
+```
+
 If you have allocated storage for the string outside the function, which you cannot exceed within the function, it's probably a good idea to pass in the size.
 
 Function Does Not Alter the String

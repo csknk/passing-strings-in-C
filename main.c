@@ -13,6 +13,7 @@ int main()
 	char *strP = str;		// Pointer to the first element of str
 
 	// Empty char pointer, heap allocated
+	// ----------------------------------
 	char *s = malloc(BUFFER_SIZE + 1);
 
 	amend(strP, BUFFER_SIZE);
@@ -25,8 +26,12 @@ int main()
 	char fixed[] = "David is ";
 	char *fixedPtr = fixed;
 	char *sentence = NULL;
+	puts("Set buffer dynamically");
 	setBufferDynamically(fixedPtr, &sentence);
 	printf("sentence: %s\n", sentence);
+	
+	// Memory for sentence was dynamically allocated in setBufferDynamically()
+	// ----------------------------------------------------------------------- 
 	free(sentence);
 	return 0;
 }
@@ -40,25 +45,45 @@ void amend(char *str, size_t len)
 	*(str + len) = 0;
 }
 
-// Don't know the final length of the string - maybe it's determined by
-// user input or similar.
+
+// Get string from user and concatenate it onto src.
+// We don't know the final length of the string.
 int setBufferDynamically(const char *src, char **resultBuffer)
 {
+	// Initalise the variables required by getline()
+	// ---------------------------------------------
+	char *userStr = NULL;	// To be dynamically allocated by getline()
+	size_t len = 0;		// Length allocated by getline()
+	ssize_t lineSize = 0;	// Length of chars read by getline
 
-	for (size_t i = 0; i < strlen(src); i++) {
-		printf("src[%lu] = %c\n", i, src[i]);
-	}
-
-	char *userStr = NULL; // This will be dynamically allocated by getline()
-	size_t len = 0;
-	ssize_t lineSize = 0;
+	// Get line with getlline()
+	// ------------------------
+	puts("Enter a line to be read by getline():");
 	lineSize = getline(&userStr, &len, stdin);
+
+	// Replace the terminating newline with a NUL - wastes a byte
+	// -----------------------------------------------------------
 	userStr[strcspn(userStr, "\n")] = 0;
+
+	// Compute the size for the new string
+	// -----------------------------------
 	size_t totalSize = strlen(src) + lineSize + 1;
-	*resultBuffer = realloc(*resultBuffer, totalSize + 1);
-	memset(*resultBuffer, 'a', totalSize);
-	strcpy(*resultBuffer, src);	// strcpy first - can't strcat into an empty buffer
+
+	// Allocate memory for the result buffer to account for the concatenation
+	// ----------------------------------------------------------------------
+	*resultBuffer = calloc(totalSize + 1, sizeof **resultBuffer);
+	
+	// Copy src into resultBuffer - you can't strcat() into an empty buffer
+	// --------------------------------------------------------------------
+	strcpy(*resultBuffer, src);
+
+	// Concatenate userStr onto resultBuffer
+	// -------------------------------------
 	strcat(*resultBuffer, userStr);
+
+	// Release memory dynamically allocated by getline()
+	// -------------------------------------------------
 	free(userStr);
+
 	return (int)totalSize;
 }
