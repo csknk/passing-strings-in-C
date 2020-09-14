@@ -95,6 +95,7 @@ If you need to change what is pointed to from with the function (e.g you might n
  **/
 void add_xy(char **s, size_t length)
 {
+	// In production code, don't directly assign the return value of realloc in case of failure.
 	*s = realloc(*s, length + 3);
 	*(*s + length) = 'x';
 	*(*s + length + 1) = 'y';
